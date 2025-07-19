@@ -1,4 +1,4 @@
-# Step-by-Step Guide for Using Toggl and Calendar Integration Scripts
+# Step-by-Step Guide for Syncing Toggl Time Entries and Apple Calendar
 
 [中文](README.zh.md)
 

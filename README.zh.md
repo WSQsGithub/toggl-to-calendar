@@ -1,4 +1,4 @@
-# 使用 Toggl 与日历集成脚本的分步指南
+# 使用 Toggl 与苹果日历同步脚本的分步指南
 
 [English](README.md)
 
