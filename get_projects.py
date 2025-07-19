@@ -1,8 +1,12 @@
 import requests
 
 # Replace with your Toggl API token and workspace ID
-TOGGL_API_TOKEN = "53b04934fa6cdd0d047ba24fea805ac0"
-WORKSPACE_ID = "4443420"
+import json
+
+with open("config.json") as f:
+    config = json.load(f)
+TOGGL_API_TOKEN = config["TOGGL_API_TOKEN"]
+WORKSPACE_ID = config["TOGGL_WORKSPACE_ID"]
 
 def get_projects(api_token, workspace_id):
     url = f"https://api.track.toggl.com/api/v9/workspaces/{workspace_id}/projects?active=true"

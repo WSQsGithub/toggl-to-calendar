@@ -5,16 +5,13 @@ import subprocess
 import sys
 import hashlib
 
-# Configuration: you need to use your own 
-TOGGL_API_TOKEN = "53b04934fa6cdd0d047ba24fea805ac0" # obtained from Profile > Profile Setting > API Token > Click to reveal
-TOGGL_WORKSPACE_ID = "4443420" # obtained from Projects, the string of numbers in the browser address, i.e.  https://track.toggl.com/projects/TOGGL_WORKSPACE_ID/list
-id_to_name = { # obtained by running python get_projects.py
-        "211356111": "Work",
-        "211356121": "Personal",
-        "211356119": "Growth",
-        "211356114": "Relationships",
-        "193947539": "Hobbies",
-    }
+import json
+
+with open("config.json") as f:
+    config = json.load(f)
+TOGGL_API_TOKEN = config["TOGGL_API_TOKEN"]
+TOGGL_WORKSPACE_ID = config["TOGGL_WORKSPACE_ID"]
+id_to_name = config["id_to_name"]
 
 def get_last_week_entries(start_date=None, end_date=None):
     """Fetch time entries from the last week using Toggl API"""
