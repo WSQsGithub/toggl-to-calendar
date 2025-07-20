@@ -2,8 +2,10 @@ import requests
 
 # Replace with your Toggl API token and workspace ID
 import json
+import os
 
-with open("config.json") as f:
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
+with open(config_path) as f:
     config = json.load(f)
 TOGGL_API_TOKEN = config["TOGGL_API_TOKEN"]
 WORKSPACE_ID = config["TOGGL_WORKSPACE_ID"]
