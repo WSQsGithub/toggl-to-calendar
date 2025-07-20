@@ -66,9 +66,9 @@ Before running `test.py`, create calendars in your calendar application (e.g., G
   ```bash
   python get_projects.py
   ```
-- To run tests or execute the main functionality (e.g., syncing Toggl data with calendars):
+- To execute the main functionality (e.g., syncing Toggl data with calendars):
   ```bash
-  python test.py
+  python sync.py
   ```
 
 ## Important Notes

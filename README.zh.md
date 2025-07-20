@@ -66,9 +66,9 @@ python get_projects.py
   ```bash
   python get_projects.py
   ```
-- 运行测试或执行主要功能（如同步 Toggl 数据到日历）：
+- 运行主要功能（如同步 Toggl 数据到日历）：
   ```bash
-  python test.py
+  python sync.py
   ```
 
 ## 重要说明
