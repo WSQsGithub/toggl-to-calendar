@@ -59,7 +59,7 @@ python get_projects.py
 根据脚本显示的项目 ID 和名称，更新 `config.json` 中的 `id_to_name` 部分。
 
 ### 5. 在日历应用中创建日历
-在运行 `test.py` 之前，请在你的日历应用（如 Google 日历、Outlook）中创建与 `config.json` 的 `id_to_name` 部分中项目名称**完全一致**的日历。例如，如果 `id_to_name` 包含 `"Work"` 和 `"Personal"`，请分别创建名为“Work”和“Personal”的日历。
+在运行 `sync.py` 之前，请在你的日历应用（如 Google 日历、Outlook）中创建与 `config.json` 的 `id_to_name` 部分中项目名称**完全一致**的日历。例如，如果 `id_to_name` 包含 `"Work"` 和 `"Personal"`，请分别创建名为“Work”和“Personal”的日历。
 
 ### 6. 运行脚本
 - 获取 Toggl 项目数据：
@@ -74,7 +74,7 @@ python get_projects.py
 ## 重要说明
 - 确保你拥有 Toggl 和日历服务商的必要权限和有效 API token。
 - 请确保你的日历名称与 `id_to_name` 条目完全一致，脚本依赖这些名称进行匹配。
-- 有关更多细节或故障排查，请参考脚本（`get_projects.py`、`test.py`）中的注释。
+- 有关更多细节或故障排查，请参考脚本（`get_projects.py`、`sync.py`）中的注释。
 - 如遇问题，请仔细检查 `config.json` 的准确性，并确保所有依赖已安装。
 
 按照以上步骤操作，你应该能够顺利完成脚本的设置与使用。

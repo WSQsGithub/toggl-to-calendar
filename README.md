@@ -59,7 +59,7 @@ python get_projects.py
 Update the `id_to_name` section in `config.json` with the project IDs and corresponding names displayed by the script.
 
 ### 5. Create Calendars in Your Calendar Application
-Before running `test.py`, create calendars in your calendar application (e.g., Google Calendar, Outlook) with names that **exactly match** the project names listed in the `id_to_name` section of `config.json`. For example, if `id_to_name` includes `"Work"` and `"Personal"`, create calendars named "Work" and "Personal".
+Before running `sync.py`, create calendars in your calendar application (e.g., Google Calendar, Outlook) with names that **exactly match** the project names listed in the `id_to_name` section of `config.json`. For example, if `id_to_name` includes `"Work"` and `"Personal"`, create calendars named "Work" and "Personal".
 
 ### 6. Run the Scripts
 - To fetch Toggl project data:
@@ -74,7 +74,7 @@ Before running `test.py`, create calendars in your calendar application (e.g., G
 ## Important Notes
 - Ensure you have the necessary permissions and valid API tokens for Toggl and your calendar provider.
 - Verify that your calendar names match the `id_to_name` entries exactly, as the scripts rely on these names to function correctly.
-- Refer to comments within the scripts (`get_projects.py`, `test.py`) for additional details or troubleshooting.
+- Refer to comments within the scripts (`get_projects.py`, `sync.py`) for additional details or troubleshooting.
 - If you encounter issues, double-check your `config.json` for accuracy and ensure all dependencies are installed.
 
 By following these steps in order, you should be able to set up and use the scripts successfully.
