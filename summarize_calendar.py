@@ -551,7 +551,7 @@ class ReportGenerator:
         lines.append("\n✅ Completed Reminders:")
         if reminders_dict['completed']:
             for r in reminders_dict['completed']:
-                lines.append(f"  ✓ {r.name} | {r.list_name}")
+                lines.append(f"  ✓ {r.name} | {r.list_name} ({r.body})")
         else:
             lines.append("  (none)")
 
@@ -569,11 +569,12 @@ class ReportGenerator:
         if reminders:
             for r in reminders:
                 priority_emoji = {
-                    9: "🔴",
-                    5: "🟡", 
-                    1: "🟢"
+                    "9": "🔴",
+                    "5": "🟡", 
+                    "1": "🟢",
+                    "0": "⚪️"
                 }.get(r.priority, "")
-                lines.append(f"  {priority_emoji} {r.name} | {r.list_name} | Due: {r.due_date}")
+                lines.append(f"  {priority_emoji} {r.name} | {r.list_name} | Due: {r.due_date} ({r.body})")
         else:
             lines.append("  (none)")
 
@@ -586,6 +587,27 @@ class CalendarSummarizer:
         self.reminder_source = ReminderDataSource(self.executor)
         self.analyzer = EventAnalyzer()
         self.report_generator = ReportGenerator()
+
+    def _get_data(self, start_date, end_date): 
+        """并行获取日历和提醒"""
+        t0 = time.perf_counter()
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            future_events = executor.submit(self._get_calendar_events, start_date, end_date)
+            future_reminders = executor.submit(self.reminder_source.get_data, start_date, end_date)
+
+            events = future_events.result()
+            t1 = time.perf_counter()
+            print(f"找到 {len(events)} 个日历事件")
+            print(f"花费 {t1-t0:.3f} 秒")
+
+            reminders = future_reminders.result()
+            t2 = time.perf_counter()
+            print(f"找到 {len(reminders)} 个相关提醒")
+            print(f"花费 {t2-t1:.3f} 秒")
+
+        print(f"总计耗时 {t2-t0:.3f} 秒")
+        return events, reminders
     
     def generate_summary(self, start_date_str: str, end_date_str: str = None) -> str:
         """生成日程摘要"""
@@ -596,15 +618,18 @@ class CalendarSummarizer:
         end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
         
         # 获取数据
-        t0 = time.perf_counter()
-        events = self._get_calendar_events(start_date, end_date)
-        print(f"找到 {len(events)} 个日历事件")
-        t1 = time.perf_counter()
-        print(f"花费 {t1-t0} 秒")
-        reminders = self.reminder_source.get_data(start_date, end_date)
-        t2 = time.perf_counter()
-        print(f"找到 {len(reminders)} 个相关提醒")
-        print(f"花费 {t2-t1} 秒")
+        events, reminders = self._get_data(start_date, end_date)
+        print(reminders)
+        # t0 = time.perf_counter()
+        # events = self._get_calendar_events(start_date, end_date)
+        # print(f"找到 {len(events)} 个日历事件")
+        # t1 = time.perf_counter()
+        # print(f"花费 {t1-t0} 秒")
+        # reminders = self.reminder_source.get_data(start_date, end_date)
+        # t2 = time.perf_counter()
+        # print(f"找到 {len(reminders)} 个相关提醒")
+        # print(f"花费 {t2-t1} 秒")
+
         # 分析数据
         planned, actual = self.analyzer.split_events(events)
         reminders_dict = self.analyzer.categorize_reminders(reminders)
@@ -642,11 +667,11 @@ def main():
     print("\n" + "="*50 + "\n")
     
     # 获取昨天的日期
-    yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    date = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
     
     # 生成摘要
     print("生成日程摘要...")
-    summary = summarizer.generate_summary(yesterday)
+    summary = summarizer.generate_summary(date)
     print(summary)
 
 if __name__ == "__main__":
