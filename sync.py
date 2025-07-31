@@ -300,12 +300,12 @@ def send_macos_notification(title, message):
         print(f"Notification failed: {e}")
 
 def sync():
-    print("Fetching last week's time entries from Toggl...")
 
     today = datetime.now()
-    start_date = (today - timedelta(days=7)).strftime("%Y-%m-%dT00:00:00.000Z")
+    start_date = (today - timedelta(days=3)).strftime("%Y-%m-%dT00:00:00.000Z")
     end_date = (today).strftime("%Y-%m-%dT23:59:59.999Z")
 
+    print("Toggl → Calendar Sync", f"Syncing Toggl entries from 🗓️ {start_date[:10]} to 🗓️ {end_date[:10]}")
 
     send_macos_notification("Toggl → Calendar Sync", f"Syncing Toggl entries from 🗓️ {start_date[:10]} to 🗓️ {end_date[:10]}")
     
