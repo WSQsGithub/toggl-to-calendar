@@ -304,7 +304,7 @@ def main():
 
     today = datetime.now()
     start_date = (today - timedelta(days=7)).strftime("%Y-%m-%dT00:00:00.000Z")
-    end_date = (today-timedelta(days=1)).strftime("%Y-%m-%dT23:59:59.999Z")
+    end_date = (today).strftime("%Y-%m-%dT23:59:59.999Z")
 
 
     send_macos_notification("Toggl → Calendar Sync", f"Syncing Toggl entries from 🗓️ {start_date[:10]} to 🗓️ {end_date[:10]}")
