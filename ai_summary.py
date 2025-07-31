@@ -120,6 +120,7 @@ class ReportAnalyzer:
         - Comment on the backlog status: Clean / Manageable / Needs triage.
 
         ⚖️ Judgment Summary Table
+        
         | Aspect        | Status       | Comment                              |
         |---------------|--------------|--------------------------------------|
         | Execution     | ✅/⚠️/✖️        | e.g., “Solid & goal-aligned”         |

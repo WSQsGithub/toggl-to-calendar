@@ -1,3 +1,4 @@
+import os
 from typing import Optional, Literal
 from datetime import datetime, timedelta
 from summarize_calendar import CalendarSummarizer
@@ -94,6 +95,12 @@ def parse_args():
         action="store_true",
         help="Sync from toggl to apple calendar"
     )
+
+    parser.add_argument(
+        "--save",
+        action="store_true",
+        help="Save report to file"
+    )
     
     return parser.parse_args()
 
@@ -109,7 +116,18 @@ if __name__ == "__main__":
         report_type = "DAILY"
 
     do_sync = args.sync
+
+    report = wrap_up(report_type, do_sync)
+
+    if args.save:
+        journal_dir = '/Users/wsq/Codespace/Obsidian/Work/2025/Journals'
+        os.makedirs(journal_dir, exist_ok=True)
+
+        # Define the output file path
+        filename = f"{report_type}_{datetime.now().strftime('%Y%m%d')}.md"
+        filepath = os.path.join(journal_dir, filename)
+
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(report)
     
-    report = wrap_up(option=report_type, do_sync=do_sync)
-    
-    print(report)
+        print(f"Saved to {filepath}")
