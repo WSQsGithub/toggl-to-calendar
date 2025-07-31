@@ -2,11 +2,14 @@ from typing import Optional, Literal
 from datetime import datetime, timedelta
 from summarize_calendar import CalendarSummarizer
 from ai_summary import ReportAnalyzer
+from sync import sync 
 
 def wrap_up(option: Optional[Literal["Daily", "Weekly"]] = "Daily") -> None:
     """Generate and analyze calendar reports for Daily or Weekly periods"""
     
     today = datetime.now()
+    
+    sync()
     
     # Calculate date range based on option
     if option == "Daily":

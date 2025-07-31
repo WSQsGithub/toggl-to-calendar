@@ -299,7 +299,7 @@ def send_macos_notification(title, message):
     except subprocess.CalledProcessError as e:
         print(f"Notification failed: {e}")
 
-def main():
+def sync():
     print("Fetching last week's time entries from Toggl...")
 
     today = datetime.now()
@@ -395,4 +395,4 @@ if __name__ == "__main__":
         print("Error: 'requests' library not found. Install with: pip install requests")
         sys.exit(1)
     
-    main()
+    sync()
