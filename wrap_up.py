@@ -4,12 +4,13 @@ from summarize_calendar import CalendarSummarizer
 from ai_summary import ReportAnalyzer
 from sync import sync 
 
-def wrap_up(option: Optional[Literal["DAILY", "WEEKLY"]] = "DAILY") -> None:
+def wrap_up(option: Optional[Literal["DAILY", "WEEKLY"]] = "DAILY", do_sync: Optional[bool] = False) -> None:
     """Generate and analyze calendar reports for Daily or Weekly periods"""
     
     today = datetime.now()
     
-    sync()
+    if do_sync:
+        sync()
 
     # Calculate date range based on option
     if option.upper() == "DAILY":
@@ -44,17 +45,21 @@ def wrap_up(option: Optional[Literal["DAILY", "WEEKLY"]] = "DAILY") -> None:
         
         # Analyze the summary with context about the report type
         result = analyzer.generate_analysis(summary, report_type=option)
+
+        outputLines = []
         
-        print("=" * 60)
-        print(f"CALENDAR ANALYSIS REPORT - {report_type}")
-        print("=" * 60)
-        print(f"Period: {date_str}")
-        print(f"Generated: {today.strftime('%Y-%m-%d %H:%M:%S')}")
-        print("\n" + "=" * 20 + " SUMMARY " + "=" * 20)
-        print(summary)
-        print("\n" + "=" * 20 + " ANALYSIS " + "=" * 19)
-        print(result)
-        print("=" * 60)
+        outputLines.append("=" * 60)
+        outputLines.append(f"📊 CALENDAR ANALYSIS REPORT - {report_type}")
+        outputLines.append(f"📅 Period: {date_str}")
+        outputLines.append(f"⏰ Generated: {today.strftime('%Y-%m-%d %H:%M:%S')}")
+        outputLines.append("\n" + "=" * 20 + " 📝 SUMMARY " + "=" * 20)
+        outputLines.append(summary)
+        outputLines.append("\n" + "=" * 20 + " 🔍 ANALYSIS " + "=" * 19)
+        outputLines.append(result)
+        outputLines.append("=" * 60)
+        
+        # Join all lines and print the complete report
+        return "\n".join(outputLines)
         
     except Exception as e:
         print(f"Error generating {option.lower()} report: {e}")
@@ -83,6 +88,12 @@ def parse_args():
         action="store_true", 
         help="Generate weekly calendar analysis report"
     )
+
+    parser.add_argument(
+        "--sync",
+        action="store_true",
+        help="Sync from toggl to apple calendar"
+    )
     
     return parser.parse_args()
 
@@ -97,4 +108,8 @@ if __name__ == "__main__":
         # Default to daily if no option specified or --daily is used
         report_type = "DAILY"
 
-    wrap_up(option=report_type)
+    do_sync = args.sync
+    
+    report = wrap_up(option=report_type, do_sync=do_sync)
+    
+    print(report)
