@@ -31,7 +31,9 @@ def wrap_up(option: Optional[Literal["DAILY", "WEEKLY"]] = "DAILY", do_sync: Opt
 
     # Initialize components
     summarizer = CalendarSummarizer()
-    analyzer = ReportAnalyzer("config.json")
+
+    config_path = os.path.join(os.path.dirname(__file__), "config.json")
+    analyzer = ReportAnalyzer(config_path)
 
     try:
         # Generate calendar summary based on the option
