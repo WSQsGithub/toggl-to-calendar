@@ -4,20 +4,20 @@ from summarize_calendar import CalendarSummarizer
 from ai_summary import ReportAnalyzer
 from sync import sync 
 
-def wrap_up(option: Optional[Literal["Daily", "Weekly"]] = "Daily") -> None:
+def wrap_up(option: Optional[Literal["DAILY", "WEEKLY"]] = "DAILY") -> None:
     """Generate and analyze calendar reports for Daily or Weekly periods"""
     
     today = datetime.now()
     
     sync()
-    
+
     # Calculate date range based on option
-    if option == "Daily":
+    if option.upper() == "DAILY":
         start_date = today
         end_date = today
         date_str = today.strftime("%Y-%m-%d")
         report_type = "DAILY"
-    elif option == "Weekly":
+    elif option.upper() == "WEEKLY":
         # Get start of current week (Monday)
         days_since_monday = today.weekday()
         start_date = today - timedelta(days=days_since_monday)
@@ -33,7 +33,7 @@ def wrap_up(option: Optional[Literal["Daily", "Weekly"]] = "Daily") -> None:
 
     try:
         # Generate calendar summary based on the option
-        if option == "Daily":
+        if option == "DAILY":
             summary = summarizer.generate_summary(start_date.strftime("%Y-%m-%d"))
         else:  # Weekly
             # Assuming CalendarSummarizer can handle date ranges
@@ -92,9 +92,9 @@ if __name__ == "__main__":
     
     # Determine report type
     if args.weekly:
-        report_type = "Weekly"
+        report_type = "WEEKLY"
     else:
         # Default to daily if no option specified or --daily is used
-        report_type = "Daily"
+        report_type = "DAILY"
 
     wrap_up(option=report_type)

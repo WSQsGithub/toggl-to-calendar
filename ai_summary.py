@@ -94,8 +94,8 @@ class ReportAnalyzer:
         
         self.agent = Assistant.build_assistant(self.cfg)
 
-    def _build_prompt(self, report: str, report_type: str = "Daily") -> str:
-        tmp = "Today" if report_type == "Daily" else "This week"
+    def _build_prompt(self, report: str, report_type: str = "DAILY") -> str:
+        tmp = "Today" if report_type == "DAILY" else "This week"
         return f"""
         Please analyze the following {report_type.lower()} calendar and time tracking summary. Your job is to simulate a fast, focused evening performance review that helps the user understand:
 
@@ -135,7 +135,7 @@ class ReportAnalyzer:
         """
 
 
-    def generate_analysis(self, report: str, report_type: str = "Daily") -> str:
+    def generate_analysis(self, report: str, report_type: str = "DAILY") -> str:
         """Generate analysis of the calendar report using LLM"""
         if not hasattr(self, "cfg"):
             self._load_config()
