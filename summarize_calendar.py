@@ -619,7 +619,6 @@ class CalendarSummarizer:
         
         # 获取数据
         events, reminders = self._get_data(start_date, end_date)
-        print(reminders)
         # t0 = time.perf_counter()
         # events = self._get_calendar_events(start_date, end_date)
         # print(f"找到 {len(events)} 个日历事件")
@@ -664,7 +663,7 @@ def main():
     
     # 调试权限
     # summarizer.debug_permissions()
-    print("\n" + "="*50 + "\n")
+    # print("\n" + "="*50 + "\n")
     
     # 获取昨天的日期
     date = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
