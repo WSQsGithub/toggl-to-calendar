@@ -15,9 +15,13 @@ def wrap_up(option: Optional[Literal["DAILY", "WEEKLY"]] = "DAILY", do_sync: Opt
 
     # Calculate date range based on option
     if option.upper() == "DAILY":
-        start_date = today
+        if today.hour < 6: 
+            start_date = today - timedelta(1)
+        else: 
+            start_date = today
+
         end_date = today
-        date_str = today.strftime("%Y-%m-%d")
+        date_str = start_date.strftime("%Y-%m-%d")
         report_type = "DAILY"
     elif option.upper() == "WEEKLY":
         # Get start of current week (Monday)
@@ -126,7 +130,12 @@ if __name__ == "__main__":
         os.makedirs(journal_dir, exist_ok=True)
 
         # Define the output file path
-        filename = f"{report_type}_{datetime.now().strftime('%Y%m%d')}.md"
+        now = datetime.now()
+        if now.hour < 6:
+            report_date = now - timedelta(1)
+        else:
+            report_date = now
+        filename = f"{report_type}_{report_date.strftime('%Y%m%d')}.md"
         filepath = os.path.join(journal_dir, filename)
 
         with open(filepath, 'w', encoding='utf-8') as f:
