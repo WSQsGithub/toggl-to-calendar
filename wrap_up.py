@@ -63,7 +63,7 @@ def wrap_up(option: Optional[Literal["DAILY", "WEEKLY"]] = "DAILY", do_sync: Opt
         outputLines.append(summary)
         outputLines.append("\n" + "=" * 20 + " 🔍 ANALYSIS " + "=" * 19)
         outputLines.append(result)
-        outputLines.append("=" * 60)
+        outputLines.append("\n" + "=" * 60)
         
         # Join all lines and print the complete report
         return "\n".join(outputLines)

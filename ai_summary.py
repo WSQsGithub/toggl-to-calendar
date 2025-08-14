@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 import json
 import requests
+from deprecated import deprecated
 
 # Type alias for configuration
 Config = Dict[str, Any]
@@ -94,7 +95,11 @@ class ReportAnalyzer:
         
         self.agent = Assistant.build_assistant(self.cfg)
 
-    def _build_prompt(self, report: str, report_type: str = "DAILY") -> str:
+    def _build_prompt(self, report: str, report_type: str = "DAILY"):
+        return self._build_prompt_v2(report, report_type)
+    
+    @deprecated(reason="Use _build_prompt_v2 instead")
+    def _build_prompt_v1(self, report: str, report_type: str = "DAILY") -> str:
         tmp = "Today" if report_type == "DAILY" else "This week"
         return f"""
         Please analyze the following {report_type.lower()} calendar and time tracking summary. Your job is to simulate a fast, focused evening performance review that helps the user understand:
@@ -135,7 +140,60 @@ class ReportAnalyzer:
         - Provide 1–3 practical tips for improving scheduling, workload balance, or clarity tomorrow.
         """
 
+    def _build_prompt_v2(self, report: str, report_type: str = "DAILY") -> str:
+        tmp = "Today" if report_type.upper() == "DAILY" else "This week"
+        return f"""
+        Please analyze the following {report_type.lower()} calendar and time tracking summary. Your job is to simulate a fast, focused evening performance review and fill in the given template. 
+        ---
 
+        ⚡ {tmp} Quick Performance Review Template
+        
+        📋 Calendar & Time Tracking Summary:
+        {report}
+
+        ---
+
+        ### 1️⃣ {tmp} Execution Overview
+
+        | Category    | Planned | Completed | Completion Rate | Status | Notes / Keywords |
+        |-----------|--------|----------|----------------|--------|----------------|
+        | Tasks      | —      | —        | —              | —      | —              |
+        | Reminders  | —      | —        | —              | —      | —              |
+
+        ### 2️⃣ Workload & Pace
+
+        | Metric                 | {tmp} Data   | Ideal Range | Status | Notes |
+        |-----------------------|--------------|------------|--------|-------|
+        | Deep Work Hours        | —            | 3–5h       | —      | —     |
+        | Shallow / Fragmented   | —            | ≤2h        | —      | —     |
+        | Total Work Hours       | —            | 5–7h       | —      | —     |
+        | Rest / Sleep           | (Sleep is usually not recorded, you may infer from the data.)  | 7–8h       | —      | —     |
+
+        
+
+        ### 3️⃣ Reminders / Backlog Quick Check
+        
+        - ✅ Completed: —
+        - ⚠️ Overdue: — → Prioritize first thing tomorrow
+        
+        > Comment on the backlog status: Clean / Manageable / Needs triage.
+
+        ### 4️⃣ Tactical Recommendations (Next Day)
+
+        1. e.g. Handle overdue reminders → Prioritize 9–10 AM tomorrow
+        2. e.g. Deep work → Reserve a continuous 2h block, no fragmentation
+        3. e.g. Plan calibration → Quickly confirm top 3 key tasks for {tmp} in the morning
+
+        ### 5️⃣ One-Line Self-Debrief
+
+        > "{tmp} completion rate —, deep work —, ⚠️ backlog — → Handle overdue first thing tomorrow, keep deep work blocks uninterrupted."
+        
+        ### 6️⃣ Motivation / Positive Feedback
+
+        > e.g. "Great effort today! Keep building momentum — small consistent steps compound into big results."
+        
+        """
+    
     def generate_analysis(self, report: str, report_type: str = "DAILY") -> str:
         """Generate analysis of the calendar report using LLM"""
         if not hasattr(self, "cfg"):
